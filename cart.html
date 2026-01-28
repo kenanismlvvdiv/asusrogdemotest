@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - ROG Republic of Gamers</title>
+    <meta name="description" content="Review your ROG gaming gear selection and proceed to checkout.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --rog-black: #0a0a0a;
+            --rog-red: #ff2a2a;
+            --rog-silver: #c0c0c0;
+            --rog-dark-gray: #1a1a1a;
+            --rog-orange: #ff6b35;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--rog-black);
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .font-orbitron {
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, var(--rog-red), var(--rog-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.9);
+        }
+        
+        .cart-bg {
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.95), rgba(26, 26, 26, 0.9)),
+                        url('resources/hero-bg.jpg') center/cover fixed;
+            min-height: 100vh;
+            padding-top: 5rem;
+        }
+        
+        .cart-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .cart-card {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 42, 42, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        
+        .cart-item {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(255, 42, 42, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .cart-item:hover {
+            border-color: rgba(255, 42, 42, 0.3);
+            box-shadow: 0 5px 15px rgba(255, 42, 42, 0.1);
+        }
+        
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #333;
+        }
+        
+        .cart-item-details {
+            flex: 1;
+        }
+        
+        .cart-item-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        
+        .cart-item-specs {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cart-item-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--rog-red);
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(26, 26, 26, 0.8);
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+        
+        .quantity-btn {
+            background: var(--rog-red);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .quantity-btn:hover {
+            background: var(--rog-orange);
+            transform: scale(1.1);
+        }
+        
+        .quantity-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .quantity-display {
+            font-weight: 600;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .remove-btn {
+            background: #dc2626;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .remove-btn:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+        
+        .cart-summary {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 42, 42, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 42, 42, 0.1);
+        }
+        
+        .summary-row:last-child {
+            border-bottom: none;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--rog-red);
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .checkout-btn {
+            background: linear-gradient(45deg, var(--rog-red), var(--rog-orange));
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+        
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 42, 42, 0.4);
+        }
+        
+        .checkout-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .empty-cart-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .continue-shopping-btn {
+            background: linear-gradient(45deg, var(--rog-red), var(--rog-orange));
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .continue-shopping-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 42, 42, 0.4);
+        }
+        
+        .payment-section {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 42, 42, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        
+        .payment-form {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-input {
+            padding: 0.75rem;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(255, 42, 42, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--rog-red);
+            box-shadow: 0 0 10px rgba(255, 42, 42, 0.3);
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #e5e7eb;
+        }
+        
+        @media (max-width: 768px) {
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .cart-item-image {
+                width: 100px;
+                height: 100px;
+                margin: 0 auto;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-blur fixed top-0 w-full z-50 py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="font-orbitron text-2xl font-bold gradient-text">
+                    <a href="index.html">ROG</a>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-white hover:text-red-400 transition-colors">Home</a>
+                    <a href="index.html#products" class="text-white hover:text-red-400 transition-colors">Products</a>
+                    <a href="index.html#laptops" class="text-white hover:text-red-400 transition-colors">Laptops</a>
+                    <a href="index.html#phones" class="text-white hover:text-red-400 transition-colors">Phones</a>
+                    <a href="index.html#components" class="text-white hover:text-red-400 transition-colors">Components</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="cartBtn" class="text-white hover:text-red-400 transition-colors">
+                            🛒 Cart
+                            <span id="cartBadge" class="cart-badge hidden">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="cart-bg">
+        <div class="cart-container">
+            <h1 class="font-orbitron text-4xl font-bold text-center mb-8 gradient-text">Shopping Cart</h1>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <div class="cart-card">
+                        <h2 class="font-orbitron text-2xl font-bold mb-6">Your Items</h2>
+                        <div id="cartItemsContainer">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:col-span-1">
+                    <div class="cart-summary">
+                        <h2 class="font-orbitron text-2xl font-bold mb-6">Order Summary</h2>
+                        
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        
+                        <div class="summary-row">
+                            <span>Shipping:</span>
+                            <span id="shipping">Free</span>
+                        </div>
+                        
+                        <div class="summary-row">
+                            <span>Tax:</span>
+                            <span id="tax">$0.00</span>
+                        </div>
+                        
+                        <div class="summary-row">
+                            <span>Total:</span>
+                            <span id="total">$0.00</span>
+                        </div>
+                        
+                        <button id="checkoutBtn" class="checkout-btn font-orbitron" onclick="showPaymentForm()">
+                            Proceed to Checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="paymentSection" class="payment-section hidden">
+                <h2 class="font-orbitron text-2xl font-bold mb-6">Payment Information</h2>
+                <p class="text-gray-400 mb-6">This is a demo store. No actual payment will be processed.</p>
+                
+                <form class="payment-form" onsubmit="processPayment(event)">
+                    <div class="form-group">
+                        <label class="form-label">Card Number</label>
+                        <input type="text" class="form-input" placeholder="1234 5678 9012 3456" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Expiry Date</label>
+                            <input type="text" class="form-input" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CVV</label>
+                            <input type="text" class="form-input" placeholder="123" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Cardholder Name</label>
+                        <input type="text" class="form-input" placeholder="John Doe" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" placeholder="john@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-input" placeholder="+1 (555) 123-4567" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="checkout-btn font-orbitron">
+                        Complete Order (Demo)
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="products.js"></script>
+    <script>
+        class CartPage {
+            constructor() {
+                this.cart = JSON.parse(localStorage.getItem('rog-cart')) || [];
+                this.currentLanguage = localStorage.getItem('rog-language') || 'en';
+                this.currentCurrency = localStorage.getItem('rog-currency') || 'USD';
+                this.products = this.getAllProducts();
+                this.init();
+            }
+
+            getAllProducts() {
+                const allProducts = [];
+                Object.keys(ROGProducts).forEach(category => {
+                    allProducts.push(...ROGProducts[category]);
+                });
+                return allProducts;
+            }
+
+            init() {
+                this.loadCartItems();
+                this.updateCartSummary();
+                this.updateCartDisplay();
+            }
+
+            loadCartItems() {
+                const container = document.getElementById('cartItemsContainer');
+                
+                if (this.cart.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-cart">
+                            <div class="empty-cart-icon">🛒</div>
+                            <h3 class="text-2xl font-bold mb-4">Your cart is empty</h3>
+                            <p class="text-gray-400 mb-6">Add some amazing ROG products to get started!</p>
+                            <button class="continue-shopping-btn" onclick="window.location.href='index.html'">
+                                Continue Shopping
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = '';
+                this.cart.forEach(cartItem => {
+                    const product = this.products.find(p => p.id === cartItem.id);
+                    if (product) {
+                        const cartItemElement = this.createCartItemElement(product, cartItem.quantity);
+                        container.appendChild(cartItemElement);
+                    }
+                });
+            }
+
+            createCartItemElement(product, quantity) {
+                const nameKey = `name${this.currentLanguage === 'en' ? '' : this.currentLanguage.charAt(0).toUpperCase() + this.currentLanguage.slice(1)}`;
+                const productName = product[nameKey] || product.name;
+                const productPrice = this.getProductPrice(product);
+                const totalPrice = this.getProductPrice(product, quantity);
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                itemDiv.innerHTML = `
+                    <img src="${product.image}" alt="${productName}" class="cart-item-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMzMzIi8+Cjx0ZXh0IHg9IjQwIiB5PSI0MCIgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiI+SU1BR0U8L3RleHQ+Cjwvc3ZnPg=='">
+                    
+                    <div class="cart-item-details">
+                        <h3 class="cart-item-title">${productName}</h3>
+                        <p class="cart-item-specs">${product.specs}</p>
+                        <div class="cart-item-price">${productPrice}</div>
+                    </div>
+                    
+                    <div class="quantity-control">
+                        <button class="quantity-btn" onclick="cartPage.updateQuantity('${product.id}', ${quantity - 1})" ${quantity <= 1 ? 'disabled' : ''}>-</button>
+                        <span class="quantity-display">${quantity}</span>
+                        <button class="quantity-btn" onclick="cartPage.updateQuantity('${product.id}', ${quantity + 1})" ${quantity >= product.stock ? 'disabled' : ''}>+</button>
+                    </div>
+                    
+                    <div class="cart-item-price">${totalPrice}</div>
+                    
+                    <button class="remove-btn" onclick="cartPage.removeItem('${product.id}')">Remove</button>
+                `;
+
+                return itemDiv;
+            }
+
+            updateQuantity(productId, newQuantity) {
+                if (newQuantity <= 0) {
+                    this.removeItem(productId);
+                    return;
+                }
+
+                const product = this.products.find(p => p.id === productId);
+                if (newQuantity > product.stock) {
+                    this.showNotification('Not enough stock available!', 'error');
+                    return;
+                }
+
+                const cartItem = this.cart.find(item => item.id === productId);
+                if (cartItem) {
+                    cartItem.quantity = newQuantity;
+                    localStorage.setItem('rog-cart', JSON.stringify(this.cart));
+                    this.loadCartItems();
+                    this.updateCartSummary();
+                    this.updateCartDisplay();
+                }
+            }
+
+            removeItem(productId) {
+                this.cart = this.cart.filter(item => item.id !== productId);
+                localStorage.setItem('rog-cart', JSON.stringify(this.cart));
+                this.loadCartItems();
+                this.updateCartSummary();
+                this.updateCartDisplay();
+                this.showNotification('Item removed from cart!', 'success');
+            }
+
+            updateCartSummary() {
+                const subtotal = this.cart.reduce((sum, item) => {
+                    const product = this.products.find(p => p.id === item.id);
+                    return sum + (product.price * item.quantity);
+                }, 0);
+
+                const tax = subtotal * 0.08; 
+                const total = subtotal + tax;
+
+                document.getElementById('subtotal').textContent = this.formatPrice(subtotal);
+                document.getElementById('tax').textContent = this.formatPrice(tax);
+                document.getElementById('total').textContent = this.formatPrice(total);
+
+                const checkoutBtn = document.getElementById('checkoutBtn');
+                if (this.cart.length === 0) {
+                    checkoutBtn.disabled = true;
+                    checkoutBtn.textContent = 'Cart is Empty';
+                } else {
+                    checkoutBtn.disabled = false;
+                    checkoutBtn.textContent = 'Proceed to Checkout';
+                }
+            }
+
+            updateCartDisplay() {
+                const cartBadge = document.getElementById('cartBadge');
+                const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+                
+                if (totalItems > 0) {
+                    cartBadge.textContent = totalItems;
+                    cartBadge.classList.remove('hidden');
+                } else {
+                    cartBadge.classList.add('hidden');
+                }
+            }
+
+            getProductPrice(product, quantity = 1) {
+                const currencyConfig = siteConfig.currencies[this.currentCurrency];
+                const priceKey = `price${this.currentCurrency === 'USD' ? '' : this.currentCurrency}`;
+                const price = (product[priceKey] || product.price * currencyConfig.rate) * quantity;
+                return `${currencyConfig.symbol}${price.toFixed(2)}`;
+            }
+
+            formatPrice(price) {
+                const currencyConfig = siteConfig.currencies[this.currentCurrency];
+                const convertedPrice = price * currencyConfig.rate;
+                return `${currencyConfig.symbol}${convertedPrice.toFixed(2)}`;
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `fixed top-20 right-4 z-50 px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform translate-x-full`;
+                
+                if (type === 'success') {
+                    notification.classList.add('bg-green-600', 'text-white');
+                } else if (type === 'error') {
+                    notification.classList.add('bg-red-600', 'text-white');
+                } else {
+                    notification.classList.add('bg-blue-600', 'text-white');
+                }
+                
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-full');
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
+        }
+
+        function showPaymentForm() {
+            const paymentSection = document.getElementById('paymentSection');
+            paymentSection.classList.remove('hidden');
+            paymentSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function processPayment(event) {
+            event.preventDefault();
+            
+            const checkoutBtn = event.target.querySelector('button[type="submit"]');
+            checkoutBtn.disabled = true;
+            checkoutBtn.textContent = 'Processing...';
+            
+            setTimeout(() => {
+                alert('Thank you for your order! This is a demo store - no actual payment was processed.');
+                
+                localStorage.removeItem('rog-cart');
+                window.location.href = 'index.html';
+            }, 2000);
+        }
+
+        const cartPage = new CartPage();
+    </script>
+</body>
+</html>

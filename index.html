@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ROG - Republic of Gamers | Ultimate Gaming Experience</title>
+    <meta name="description" content="Experience the ultimate in gaming performance with ASUS ROG. Discover our latest gaming laptops, accessories, and battlestation setups."/>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    
+    <style>
+        :root {
+            --rog-black: #0a0a0a;
+            --rog-red: #ff2a2a;
+            --rog-silver: #c0c0c0;
+            --rog-dark-gray: #1a1a1a;
+            --rog-orange: #ff6b35;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--rog-black);
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .font-orbitron {
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.9), rgba(26, 26, 26, 0.8)),
+                        url('resources/hero-bg.jpg') center/cover;
+            position: relative;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, var(--rog-red), var(--rog-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(255, 42, 42, 0.3);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(255, 42, 42, 0.2);
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .counter {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--rog-red);
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(45deg, var(--rog-red), var(--rog-orange));
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+        
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.9);
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+        
+        .product-card {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 42, 42, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            border-color: var(--rog-red);
+            box-shadow: 0 15px 35px rgba(255, 42, 42, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(26, 26, 26, 0.9);
+            border: 2px solid rgba(255, 42, 42, 0.3);
+            border-radius: 25px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--rog-red);
+            box-shadow: 0 0 20px rgba(255, 42, 42, 0.3);
+        }
+        
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .filter-tab {
+            padding: 0.75rem 1.5rem;
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(255, 42, 42, 0.3);
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .filter-tab:hover,
+        .filter-tab.active {
+            background: var(--rog-red);
+            border-color: var(--rog-red);
+            box-shadow: 0 5px 15px rgba(255, 42, 42, 0.4);
+        }
+        
+        .welcome-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .welcome-content {
+            background: linear-gradient(135deg, var(--rog-dark-gray), var(--rog-black));
+            border: 2px solid var(--rog-red);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(255, 42, 42, 0.3);
+        }
+        
+        .language-selector,
+        .currency-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .lang-btn,
+        .currency-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(255, 42, 42, 0.3);
+            border-radius: 15px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .lang-btn:hover,
+        .lang-btn.active,
+        .currency-btn:hover,
+        .currency-btn.active {
+            background: var(--rog-red);
+            border-color: var(--rog-red);
+            box-shadow: 0 5px 15px rgba(255, 42, 42, 0.4);
+        }
+        
+        .continue-btn {
+            background: linear-gradient(45deg, var(--rog-red), var(--rog-orange));
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 42, 42, 0.4);
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--rog-red);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        
+        .price-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--rog-red);
+            margin: 1rem 0;
+        }
+        
+        .add-to-cart-btn {
+            background: linear-gradient(45deg, var(--rog-red), var(--rog-orange));
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 42, 42, 0.4);
+        }
+        
+        .add-to-cart-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .stock-indicator {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        .in-stock {
+            color: #10b981;
+        }
+        
+        .low-stock {
+            color: #f59e0b;
+        }
+        
+        .out-of-stock {
+            color: #ef4444;
+        }
+        
+        .hero-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, var(--rog-red), var(--rog-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .footer {
+            background: var(--rog-dark-gray);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 42, 42, 0.2);
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer p {
+            color: var(--rog-silver);
+            font-size: 0.875rem;
+        }
+        
+        .login-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .login-btn:hover {
+            border-color: var(--rog-red);
+            color: var(--rog-red);
+        }
+        
+        .register-btn {
+            background: linear-gradient(45deg, var(--rog-red), var(--rog-orange));
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 42, 42, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.125rem;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .filter-tabs {
+                gap: 0.5rem;
+            }
+            
+            .filter-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            .welcome-content {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .language-selector,
+            .currency-selector {
+                gap: 0.5rem;
+            }
+            
+            .lang-btn,
+            .currency-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            .auth-buttons {
+                display: flex;
+                gap: 10px;
+                margin-right: 15px;
+            }
+            
+            .auth-buttons button {
+                padding: 6px 15px;
+                font-size: 0.875rem;
+            }
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="welcomeModal" class="welcome-modal">
+        <div class="welcome-content">
+            <h1 class="font-orbitron text-3xl font-bold mb-4 gradient-text">Welcome to ROG</h1>
+            <p class="text-lg mb-6">Choose your preferred language and currency to continue</p>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Language / Dil / Язык</h3>
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="en">🇺🇸 English</button>
+                    <button class="lang-btn" data-lang="az">🇦🇿 Azərbaycan</button>
+                    <button class="lang-btn" data-lang="tr">🇹🇷 Türkçe</button>
+                    <button class="lang-btn" data-lang="ru">🇷🇺 Русский</button>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Currency</h3>
+                <div class="currency-selector">
+                    <button class="currency-btn active" data-currency="USD">💵 USD</button>
+                    <button class="currency-btn" data-currency="AZN">🇦🇿 AZN</button>
+                    <button class="currency-btn" data-currency="TRY">🇹🇷 TRY</button>
+                    <button class="currency-btn" data-currency="RUB">🇷🇺 RUB</button>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Account</h3>
+                <p class="text-gray-300 mb-4">Login or create an account to access exclusive features and offers</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="window.location.href='login.html'" class="login-btn px-6 py-3">
+                        Login
+                    </button>
+                    <button onclick="window.location.href='register.html'" class="register-btn px-6 py-3">
+                        Register
+                    </button>
+                </div>
+            </div>
+            
+            <button class="continue-btn font-orbitron" onclick="closeWelcomeModal()">Continue as Guest</button>
+        </div>
+    </div>
+
+    <nav class="nav-blur fixed top-0 w-full z-50 py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="font-orbitron text-2xl font-bold gradient-text">
+                    ROG
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="#" class="text-white hover:text-red-400 transition-colors" data-translate="nav_home">Home</a>
+                    <a href="#products" class="text-white hover:text-red-400 transition-colors" data-translate="nav_products">Products</a>
+                    <a href="#laptops" class="text-white hover:text-red-400 transition-colors" data-translate="nav_laptops">Laptops</a>
+                    <a href="#phones" class="text-white hover:text-red-400 transition-colors" data-translate="nav_phones">Phones</a>
+                    <a href="#components" class="text-white hover:text-red-400 transition-colors" data-translate="nav_components">Components</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Login and Register Buttons -->
+                    <div class="auth-buttons hidden md:flex">
+                        <button onclick="window.location.href='login.html'" class="login-btn">
+                            <span data-translate="login">Login</span>
+                        </button>
+                        <button onclick="window.location.href='register.html'" class="register-btn">
+                            <span data-translate="register">Register</span>
+                        </button>
+                    </div>
+                    
+                    <div class="relative">
+                        <button id="cartBtn" class="text-white hover:text-red-400 transition-colors relative">
+                            🛒 Cart
+                            <span id="cartBadge" class="cart-badge hidden">0</span>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <select id="languageSelect" class="bg-transparent text-white border border-red-400 rounded px-3 py-1">
+                            <option value="en">🇺🇸 EN</option>
+                            <option value="az">🇦🇿 AZ</option>
+                            <option value="tr">🇹🇷 TR</option>
+                            <option value="ru">🇷🇺 RU</option>
+                        </select>
+                    </div>
+                    <div class="relative">
+                        <select id="currencySelect" class="bg-transparent text-white border border-red-400 rounded px-3 py-1">
+                            <option value="USD">💵 USD</option>
+                            <option value="AZN">🇦🇿 AZN</option>
+                            <option value="TRY">🇹🇷 TRY</option>
+                            <option value="RUB">🇷🇺 RUB</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Login/Register Buttons -->
+            <div class="md:hidden flex justify-center mt-4">
+                <div class="auth-buttons">
+                    <button onclick="window.location.href='login.html'" class="login-btn text-sm">
+                        <span data-translate="login">Login</span>
+                    </button>
+                    <button onclick="window.location.href='register.html'" class="register-btn text-sm">
+                        <span data-translate="register">Register</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-bg min-h-screen flex items-center justify-center relative">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="text-center z-10 max-w-4xl mx-auto px-4">
+            <h1 class="hero-title font-orbitron text-2xl md:text-4xl font-black mb-6 gradient-text">
+                <span id="heroTitle">The power is now yours.</span>
+                <br/>
+            </h1>
+            <p id="heroSubtitle" class="hero-subtitle text-xl md:text-2xl mb-8 text-gray-300 max-w-2xl mx-auto">
+                Experience the ultimate gaming performance with cutting-edge technology and revolutionary design.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="scrollToProducts()" class="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105 glow-effect">
+                    <span data-translate="explore_products">Explore Products</span>
+                </button>
+                <button onclick="window.location.href='cart.html'" class="border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300">
+                    <span data-translate="view_cart">View Cart</span>
+                </button>
+                <button onclick="window.location.href='login.html'" class="border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300">
+                    <span data-translate="login">Login</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="py-20 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="section-title font-orbitron" data-translate="our_products">Our Products</h2>
+            
+            <div class="search-container mb-8">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search products..." data-translate-placeholder="search_placeholder"/>
+            </div>
+            
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-category="all" data-translate="all_products">All</button>
+                <button class="filter-tab" data-category="laptops" data-translate="laptops">Laptops</button>
+                <button class="filter-tab" data-category="phones" data-translate="phones">Phones</button>
+                <button class="filter-tab" data-category="desktops" data-translate="desktops">Desktops</button>
+                <button class="filter-tab" data-category="motherboards" data-translate="motherboards">Motherboards</button>
+                <button class="filter-tab" data-category="cases" data-translate="cases">Cases</button>
+                <button class="filter-tab" data-category="graphics" data-translate="graphics">Graphics Cards</button>
+                <button class="filter-tab" data-category="accessories" data-translate="accessories">Accessories</button>
+            </div>
+            
+            <div id="productsGrid" class="product-grid">
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p data-translate="footer_text">© 2025 ASUS ROG. All rights reserved. Republic of Gamers - For Those Who Dare.</p>
+            <div class="mt-4">
+                <button onclick="window.location.href='login.html'" class="text-blue-400 hover:text-blue-300 mx-2" data-translate="login">Login</button>
+                <button onclick="window.location.href='register.html'" class="text-blue-400 hover:text-blue-300 mx-2" data-translate="register">Register</button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="products.js"></script>
+    <script src="main.js"></script>
+
+</body>
+</html>
